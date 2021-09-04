@@ -1735,12 +1735,20 @@ tile(Monitor *m)
           for (i = 0, my = ty = m->gappx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
                   if (i < m->nmaster) {
                           h = (m->wh - my) / (MIN(n, m->nmaster) - i) - m->gappx;
-                          resize(c, m->wx + m->gappx, m->wy + my, mw - (2*c->bw) - m->gappx, h - (2*c->bw), 0);
+                          resize(c, m->wx + m->ww - mw  + m->gappx  , m->wy + my, mw - (2*c->bw) - 2*m->gappx, h - (2*c->bw), 0);
+/* =                      resize(c, m->wx               + m->gappx  , m->wy + my, mw - (2*c->bw) -   m->gappx, h - (2*c->bw), 0); */
+/* -                      resize(c, m->wx                           , m->wy + my, mw - (2*c->bw)             , h - (2*c->bw), 0); */
+/* +                      resize(c, m->wx + m->ww - mw              , m->wy + my, mw - (2*c->bw)             , h - (2*c->bw), 0); */
+
+
                           if (my + HEIGHT(c) + m->gappx < m->wh)
                                   my += HEIGHT(c) + m->gappx;
                   } else {
                           h = (m->wh - ty) / (n - i) - m->gappx;
-                          resize(c, m->wx + mw + m->gappx, m->wy + ty, m->ww - mw - (2*c->bw) - 2*m->gappx, h - (2*c->bw), 0);
+                          resize(c, m->wx      + m->gappx, m->wy + ty, m->ww - mw - (2*c->bw) -   m->gappx , h - (2*c->bw), 0);
+/* =                      resize(c, m->wx + mw + m->gappx, m->wy + ty, m->ww - mw - (2*c->bw) - 2*m->gappx , h - (2*c->bw), 0); */
+/* -                      resize(c, m->wx + mw                       , m->wy + ty, m->ww - mw - (2*c->bw)  , h - (2*c->bw), 0); */
+/* +                      resize(c, m->wx                            , m->wy + ty, m->ww - mw - (2*c->bw)  , h - (2*c->bw), 0); */
                           if (ty + HEIGHT(c) + m->gappx < m->wh)
                                   ty += HEIGHT(c) + m->gappx;
                   }
@@ -1754,12 +1762,22 @@ tile(Monitor *m)
                           h = (m->wh - my) / (MIN(n, m->nmaster) - i);
                           if (n == 1)
                                   resize(c, m->wx - c->bw, m->wy, m->ww, m->wh, False);
+/* =                              resize(c, m->wx - c->bw     , m->wy     , m->ww         , m->wh, False); */
+/* -                              resize(c, m->wx             , m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0); */
+/* +                              resize(c, m->wx + m->ww - mw, m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0); */
                           else
-                                  resize(c, m->wx - c->bw, m->wy + my, mw - c->bw, h - c->bw, False);
+                                  resize(c, m->wx + m->ww - mw - c->bw     , m->wy + my, mw - c->bw    , h - c->bw, False);
+/* =                              resize(c, m->wx              - c->bw     , m->wy + my, mw - c->bw    , h - c->bw, False); */
+/* -                              resize(c, m->wx                          , m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0); */
+/* +                              resize(c, m->wx + m->ww - mw             , m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0); */
                           my += HEIGHT(c) - c->bw;
                   } else {
                           h = (m->wh - ty) / (n - i);
-                          resize(c, m->wx + mw - c->bw, m->wy + ty, m->ww - mw, h - c->bw, False);
+                          resize(c, m->wx      - c->bw, m->wy + ty, m->ww - mw            , h - c->bw, False);
+/* =                      resize(c, m->wx + mw - c->bw, m->wy + ty, m->ww - mw            , h - c->bw, False); */
+/* -                      resize(c, m->wx + mw        , m->wy + ty, m->ww - mw - (2*c->bw), h - (2*c->bw), 0); */
+/* +                      resize(c, m->wx             , m->wy + ty, m->ww - mw - (2*c->bw), h - (2*c->bw), 0); */
+
                           ty += HEIGHT(c) - c->bw;
                   }
     }
