@@ -800,10 +800,20 @@ tile(Monitor *m)
 
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster) {
-			resize(c, mx, my, mw - (2*c->bw), (mh / mfacts) + (i < mrest ? 1 : 0) - (2*c->bw), 0);
+      /* resize(c, m->wx + m->ww - mw - iv ,       my , mw - (2*c->bw), (mh / mfacts) + (i               < mrest ? 1 : 0) - (2*c->bw), 0); */
+      resize(c, m->wx + m->ww - mw - ov ,          my , mw - (2*c->bw), (mh / mfacts) + (i               < mrest ? 1 : 0) - (2*c->bw), 0);
+/* =  resize(c, mx                      ,          my , mw - (2*c->bw), (mh / mfacts) + (i                 < mrest ? 1 : 0) - (2*c->bw), 0); */
+/* -  resize(c, m->wx                   , m->wy + my  , mw - (2*c->bw),                                                   h - (2*c->bw), 0); */
+/* +  resize(c, m->wx + m->ww - mw      , m->wy + my  , mw - (2*c->bw),                                                   h - (2*c->bw), 0); */
+
 			my += HEIGHT(c) + ih;
 		} else {
-			resize(c, sx, sy, sw - (2*c->bw), (sh / sfacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), 0);
+      /* resize(c, m->wx     + iv ,         sy,         sw - (2*c->bw), (sh / sfacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), 0); */
+      resize(c, m->wx     + ov ,            sy,         sw - (2*c->bw), (sh / sfacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), 0);
+/* =  resize(c, sx             ,            sy,         sw - (2*c->bw), (sh / sfacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), 0); */
+/* -  resize(c, m->wx + mw     , m->wy + ty, m->ww - mw - (2*c->bw),                                             h - (2*c->bw), 0); */
+/* +  resize(c, m->wx          , m->wy + ty, m->ww - mw - (2*c->bw),                                             h - (2*c->bw), 0); */
+
 			sy += HEIGHT(c) + ih;
 		}
 }
